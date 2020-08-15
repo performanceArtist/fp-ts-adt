@@ -1,5 +1,6 @@
 import { Reader } from 'fp-ts/lib/Reader';
 import { Expand } from '../utils';
+import { array, reader } from 'fp-ts';
 
 type Combine = {
   <A, RA, R>(a: Reader<A, RA>): Reader<A, [RA]>;
@@ -44,6 +45,5 @@ type Combine = {
   ): Reader<Expand<A & B & C & D & E & F & G>, [RA, RB, RC, RD, RE, RF, RG]>;
 };
 
-export const combine: Combine = (...args: Array<Reader<any, any>>) => (
-  e: object,
-) => args.map(r => r(e)) as any;
+export const combine: Combine = (...args: Array<Reader<any, any>>) =>
+  array.sequence(reader.reader)(args) as any;

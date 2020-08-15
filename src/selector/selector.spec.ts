@@ -81,6 +81,18 @@ describe('selector.sequenceT', () => {
   expect(f2).toBeCalledTimes(1);
 });
 
+describe('selector.combine', () => {
+  it('typecasts array.sequence(selector)', () => {
+    const a = selector.key<number>()('a');
+    const b = selector.key<number>()('b');
+    const ab = selector.combine(a, b);
+
+    const r1 = ab.run({ a: 0, b: 0 });
+    const r2 = ab.run({ a: 0, b: 0 });
+    expect(r1).toBe(r2);
+  });
+});
+
 describe('selector.key', () => {
   it('memoizes', () => {
     const f = jest.fn() as (b: number) => number;

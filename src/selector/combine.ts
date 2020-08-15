@@ -45,4 +45,4 @@ type Combine = {
 };
 
 export const combine: Combine = (...args: Array<Selector<any, any>>) =>
-  selector.from(e => selector.sequence(args).run(e)) as any;
+  selector.sequence(args) as any;
