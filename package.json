@@ -1,0 +1,34 @@
+{
+  "name": "ts-adt",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist/**/*"],
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "prettify": "prettier --write src/**/*.{ts,tsx,js,jsx,css,scss,json}",
+    "check-types": "tsc -p . --noEmit",
+    "check-types:watch": "tsc -p . --noEmit -w"
+  },
+  "author": "performanceArtist",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/performanceArtist/fp-ts-adt.git"
+  },
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/html-webpack-plugin": "^3.2.3",
+    "@types/jest": "^26.0.9",
+    "@types/node": "^12.12.53",
+    "babel-jest": "^26.2.2",
+    "fp-ts": "^2.8.1",
+    "jest": "^26.2.2",
+    "prettier": "^1.19.1",
+    "ts-jest": "^26.1.4",
+    "typescript": "^3.9.7"
+  }
+}
