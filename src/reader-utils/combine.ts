@@ -2,7 +2,7 @@ import { Reader } from 'fp-ts/lib/Reader';
 import { Expand } from '../utils';
 
 type Combine = {
-  <A, RA, R>(a: Reader<A, RA>): Reader<A, RA>;
+  <A, RA, R>(a: Reader<A, RA>): Reader<A, [RA]>;
   <A, RA, B, RB, R>(a: Reader<A, RA>, b: Reader<B, RB>): Reader<
     Expand<A & B>,
     [RA, RB]

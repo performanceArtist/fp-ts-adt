@@ -2,7 +2,7 @@ import { Selector, selector } from '../selector';
 import { Expand } from '../utils';
 
 type Combine = {
-  <A, RA, R>(a: Selector<A, RA>): Selector<A, RA>;
+  <A, RA, R>(a: Selector<A, RA>): Selector<A, [RA]>;
   <A, RA, B, RB, R>(a: Selector<A, RA>, b: Selector<B, RB>): Selector<
     Expand<A & B>,
     [RA, RB]
