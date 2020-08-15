@@ -1,7 +1,7 @@
 import { Monad2 } from 'fp-ts/lib/Monad';
 import { pipeable, pipe } from 'fp-ts/lib/pipeable';
 import { sequenceT, sequenceS } from 'fp-ts/lib/Apply';
-import { AllKeys } from '../utils';
+import { AllKeys, Expand } from '../utils';
 import { array } from 'fp-ts';
 import { identity } from 'fp-ts/lib/function';
 import { combine } from './combine';
@@ -93,12 +93,8 @@ const keys = <O, K extends keyof O>(...ks: K[]) => <R>(
   };
 };
 
-const key = <A>() => <K extends string | symbol>(
-  key: K,
-): Selector<Record<K, A>, A> => {
-  const mf = memo(identity);
-  return from(o => mf(o[key]));
-};
+const key = <A>() => <K extends string | number>(key: K) =>
+  keys<Expand<Record<K, A>>, K>(key)(identity);
 
 const id = <A>(): Selector<A, A> => from(identity);
 
