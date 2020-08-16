@@ -102,6 +102,12 @@ const key = <A>() => <K extends string | symbol>(
 
 const id = <A>(): Selector<A, A> => from(identity);
 
+const defer = <E, A, K extends keyof E>(
+  s: Selector<E, A>,
+  ...keys: K[]
+): Selector<Omit<E, K>, Selector<Pick<E, K>, A>> =>
+  selector.from(oe => selector.from(ie => s.run({ ...oe, ...ie } as any)));
+
 export const selector = {
   ...instanceSelector,
   ...pipeable(instanceSelector),
@@ -109,10 +115,9 @@ export const selector = {
   key,
   keys,
   id,
+  defer,
   sequenceT: sequenceT(instanceSelector),
   sequenceS: sequenceS(instanceSelector),
   sequence: array.array.sequence(instanceSelector),
   combine,
-  traverse: array.array.traverse(instanceSelector),
-  wither: array.array.wither(instanceSelector),
 };

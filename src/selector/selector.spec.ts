@@ -146,3 +146,18 @@ describe('selectorT', () => {
     expect(r1).toBe(r2);
   });
 });
+
+describe('selector.defer', () => {
+  const s = pipe(
+    (a: { a: number; b: string }) => ({}),
+    selector.keys('a', 'b'),
+  );
+  const combined = pipe(
+    selector.defer(s, 'a'),
+    selector.map(s => s.run({ a: 0 })),
+  );
+
+  const r1 = combined.run({ b: 'test' });
+  const r2 = combined.run({ b: 'test' });
+  expect(r1).toBe(r2);
+});
