@@ -79,13 +79,12 @@ const zipObject = <K extends string | number | symbol>(keys: Array<K>) => (
     {} as any,
   );
 
-const keys = <O, K extends keyof O>(...ks: K[]) => <R>(
-  f: (o: O) => R,
-): Selector<AllKeys<O, K>, R> => {
+const keys = <O>() => <K extends keyof O = never>(
+  ...ks: K[]
+): Selector<AllKeys<O, K>, AllKeys<O, K>> => {
   const zipObjectMemo = memo(zipObject(ks));
-  const fMemo = memo(f);
   const run = ((object: any) =>
-    pipe(zipObjectMemo(...ks.map(key => object[key])), fMemo)) as any;
+    pipe(zipObjectMemo(...ks.map(key => object[key])), identity)) as any;
 
   return {
     type: 'selector',

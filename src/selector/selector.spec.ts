@@ -107,7 +107,7 @@ describe('selector.key', () => {
 describe('selector.keys', () => {
   it('memoizes', () => {
     const f = jest.fn() as (a: { b: number }) => 0;
-    const mf = pipe(f, selector.keys('b'));
+    const mf = pipe(selector.keys<{ b: number }>()('b'), selector.map(f));
 
     mf.run({ b: 0 });
     mf.run({ b: 0 });
@@ -148,10 +148,7 @@ describe('selectorT', () => {
 });
 
 describe('selector.defer', () => {
-  const s = pipe(
-    (a: { a: number; b: string }) => ({}),
-    selector.keys('a', 'b'),
-  );
+  const s = selector.keys<{ a: number; b: string }>()('a', 'b');
   const combined = pipe(
     selector.defer(s, 'a'),
     selector.map(s => s.run({ a: 0 })),
