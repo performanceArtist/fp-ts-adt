@@ -1,4 +1,4 @@
-import { selector } from '../../selector';
+import { selector } from '../../src/selector';
 import { pipe } from 'fp-ts/lib/pipeable';
 
 {
@@ -70,17 +70,20 @@ import { pipe } from 'fp-ts/lib/pipeable';
     userService: UserService;
     todoService: TodoService;
   };
-  const todosByUser = pipe((deps: Dependencies) => {
-    const { userService, todoService } = deps;
+  const todosByUser = pipe(
+    selector.keys<Dependencies>()('todoService', 'userService'),
+    selector.map(deps => {
+      const { userService, todoService } = deps;
 
-    const user = userService.getUser();
-    const todos = todoService.getTodos();
-    const filtered = todos.filter(todo => todo.userId === user.id);
+      const user = userService.getUser();
+      const todos = todoService.getTodos();
+      const filtered = todos.filter(todo => todo.userId === user.id);
 
-    return {
-      filtered,
-    };
-  }, selector.keys('todoService', 'userService'));
+      return {
+        filtered,
+      };
+    }),
+  );
 
   const allDependencies = {
     todoService: {
@@ -164,12 +167,12 @@ import { pipe } from 'fp-ts/lib/pipeable';
   };
 
   const dependsOnUser = pipe(
-    (deps: { userService: UserService }) => 0,
-    selector.keys('userService'),
+    selector.keys<{ userService: UserService }>()('userService'),
+    selector.map(() => 0),
   );
   const dependsOnTodo = pipe(
-    (deps: { todoService: TodoService }) => 1,
-    selector.keys('todoService'),
+    selector.keys<{ todoService: TodoService }>()('todoService'),
+    selector.map(() => 1),
   );
   // @ts-ignore
   const dependsOnBoth = pipe(

@@ -21,10 +21,11 @@
     "url": "git+https://github.com/performanceArtist/fp-ts-adt.git"
   },
   "license": "ISC",
-  "dependencies": {
+  "peerDependencies": {
     "fp-ts": "^2.8.1"
   },
   "devDependencies": {
+    "fp-ts": "^2.8.1",
     "@types/jest": "^26.0.9",
     "@types/node": "^12.12.53",
     "babel-jest": "^26.2.2",
