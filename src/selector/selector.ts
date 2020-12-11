@@ -99,6 +99,13 @@ const key = <A>() => <K extends string | symbol>(
   return from(o => mf(o[key]));
 };
 
+const focus = <A extends {}>() => <K extends keyof A>(
+  key: K,
+): Selector<A, A[K]> => {
+  const mf = memo(identity);
+  return from(o => mf(o[key]));
+};
+
 const id = <A>(): Selector<A, A> => from(identity);
 
 const defer = <E, A, K extends keyof E>(
@@ -112,6 +119,7 @@ export const selector = {
   ...pipeable(instanceSelector),
   from,
   key,
+  focus,
   keys,
   id,
   defer,

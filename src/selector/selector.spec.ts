@@ -115,6 +115,21 @@ describe('selector.keys', () => {
   });
 });
 
+describe('selector.focus', () => {
+  it('memoizes', () => {
+    type State = {
+      a: number;
+      b: string;
+    };
+    const f = jest.fn() as (a: number) => 0;
+    const mf = pipe(selector.focus<State>()('a'), selector.map(f));
+
+    mf.run({ a: 0, b: '' });
+    mf.run({ a: 0, b: 'b' });
+    expect(f).toBeCalledTimes(1);
+  });
+});
+
 describe('selectorT', () => {
   const selectorOption = getSelectorM(option.option);
   const f = selector.from(option.fromPredicate((e: number) => e > 0));
