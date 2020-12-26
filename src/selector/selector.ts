@@ -5,6 +5,7 @@ import { AllKeys } from '../utils';
 import { array } from 'fp-ts';
 import { identity } from 'fp-ts/lib/function';
 import { combine } from './combine';
+import { combineT } from './combineT';
 
 type Unary<E, A> = (e: E) => A;
 export type Selector<E, A> = {
@@ -127,4 +128,6 @@ export const selector = {
   sequenceS: sequenceS(instanceSelector),
   sequence: array.array.sequence(instanceSelector),
   combine,
+  combineT,
+  memo,
 };

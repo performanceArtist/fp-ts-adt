@@ -130,6 +130,34 @@ describe('selector.focus', () => {
   });
 });
 
+describe('combineT', () => {
+  it('memoizes', () => {
+    type Todo = {
+      id: number;
+    };
+    type State = {
+      todos: Todo[];
+    };
+
+    const f = jest.fn();
+    const byId = pipe(
+      selector.combineT(
+        selector.focus<State>()('todos'),
+        selector.id<number>(),
+      ),
+      selector.map(f),
+    );
+
+    const todos: Todo[] = [{ id: 0 }];
+    const state = { todos };
+    const newState = { ...state };
+
+    byId.run([state, 0]);
+    byId.run([newState, 0]);
+    expect(f).toBeCalledTimes(1);
+  });
+});
+
 describe('selectorT', () => {
   const selectorOption = getSelectorM(option.option);
   const f = selector.from(option.fromPredicate((e: number) => e > 0));
