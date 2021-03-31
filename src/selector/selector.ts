@@ -7,10 +7,9 @@ import { identity } from 'fp-ts/lib/function';
 import { combine } from './combine';
 import { combineT } from './combineT';
 
-type Unary<E, A> = (e: E) => A;
 export type Selector<E, A> = {
   type: 'selector';
-  run: Unary<E, A>;
+  run: (e: E) => A;
 };
 const URI = 'Selector';
 type URI = typeof URI;
@@ -38,7 +37,7 @@ const memo = <A, E extends any[]>(
   };
 };
 
-const from = <E = void, A = never>(f: Unary<E, A>): Selector<E, A> => ({
+const from = <E = void, A = never>(f: (e: E) => A): Selector<E, A> => ({
   type: 'selector',
   run: memo(f),
 });

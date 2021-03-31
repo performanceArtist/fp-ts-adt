@@ -1,7 +1,7 @@
 import { combine } from './combine';
-import { implode } from './implode';
+import { defer } from './defer';
 
 export const readerUtils = {
   combine,
-  implode,
+  defer,
 };
