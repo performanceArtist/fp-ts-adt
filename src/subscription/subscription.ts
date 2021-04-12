@@ -1,6 +1,6 @@
 export type Subscription = { unsubscribe: () => void };
 
-const sequence = (...ss: Subscription[]): Subscription => ({
+const sequence = (ss: Subscription[]): Subscription => ({
   unsubscribe: () => ss.forEach(s => s.unsubscribe()),
 });
 
