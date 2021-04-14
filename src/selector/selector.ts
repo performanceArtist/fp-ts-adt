@@ -19,6 +19,10 @@ declare module 'fp-ts/lib/HKT' {
   }
 }
 
+export type SelectorInput<S> = S extends Selector<infer E, any> ? E : never;
+
+export type SelectorOutput<S> = S extends Selector<any, infer E> ? E : never;
+
 const memo = <A, E extends any[]>(
   f: (...args: E) => A,
 ): ((...args: E) => A) => {
