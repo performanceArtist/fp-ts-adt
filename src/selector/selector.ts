@@ -114,9 +114,50 @@ const defer = <E, A, K extends keyof E>(
 ): Selector<Omit<E, K>, Selector<Pick<E, K>, A>> =>
   selector.from(oe => selector.from(ie => s.run({ ...oe, ...ie } as any)));
 
+const askMap = <E, A, B>(fa: (e: [E, A]) => B) => (
+  s: Selector<E, A>,
+): Selector<E, B> => {
+  const mfa = memo(fa);
+  const worker = pipe(
+    s,
+    selector.map(a => (e: E) => mfa([e, a])),
+  );
+  let cachedWorker: ((e: E) => B) | null = null;
+  let cachedValue: B | null = null;
+
+  const firstPass = (e: E): B => {
+    cachedWorker = worker.run(e);
+    cachedValue = cachedWorker(e);
+    return cachedValue!;
+  };
+
+  const recompute = (e: E, newWorker: (e: E) => B) => {
+    cachedWorker = newWorker;
+    cachedValue = cachedWorker(e);
+    return cachedValue!;
+  };
+
+  return {
+    type: 'selector',
+    run: (e: E) => {
+      if (cachedWorker === null) {
+        return firstPass(e);
+      } else {
+        const newWorker = worker.run(e);
+        if (newWorker === cachedWorker) {
+          return cachedValue!;
+        } else {
+          return recompute(e, newWorker);
+        }
+      }
+    },
+  };
+};
+
 export const selector = {
   ...instanceSelector,
   ...pipeable(instanceSelector),
+  askMap,
   from,
   key,
   focus,

@@ -130,6 +130,27 @@ describe('selector.focus', () => {
   });
 });
 
+describe('selector.askMap', () => {
+  it('memoizes', () => {
+    const f = selector.from((a: number) => a + 1);
+    const m = jest.fn() as (a: [number, number]) => number;
+    const mf = pipe(f, selector.askMap(m));
+
+    mf.run(0);
+    mf.run(0);
+    expect(m).toBeCalledTimes(1);
+  });
+
+  it('retains the original memoization strategy', () => {
+    const f = jest.fn() as (a: [{ b: number }, { b: number }]) => 0;
+    const mf = pipe(selector.keys<{ b: number }>()('b'), selector.askMap(f));
+
+    mf.run({ b: 0 });
+    mf.run({ b: 0 });
+    expect(f).toBeCalledTimes(1);
+  });
+});
+
 describe('combineT', () => {
   it('memoizes', () => {
     type Todo = {
