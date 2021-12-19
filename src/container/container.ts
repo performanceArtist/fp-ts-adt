@@ -9,6 +9,10 @@ export type Container<O, A> = {
   depKeys: Set<keyof O>;
 };
 
+export type ContainerDeps<C> = C extends Container<infer T, any> ? T : never;
+
+export type ContainerValue<C> = C extends Container<any, infer T> ? T : never;
+
 const create = <O>() => <K extends keyof O = never>(...keys: K[]) =>
   (({
     value: selector.keys<O>()(...keys),
@@ -141,10 +145,7 @@ type Combine = {
     e: Container<E, RE>,
     f: Container<F, RF>,
     g: Container<G, RG>,
-  ): Container<
-    Expand<A & B & C & D & E & F & G>,
-    [RA, RB, RC, RD, RE, RF, RG]
-  >;
+  ): Container<Expand<A & B & C & D & E & F & G>, [RA, RB, RC, RD, RE, RF, RG]>;
 };
 
 const combine: Combine = (...args: Array<Container<any, any>>) =>
